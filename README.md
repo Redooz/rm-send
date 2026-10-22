@@ -64,7 +64,9 @@ rm-send --auth
 
 This runs `rmapi`'s device-auth flow: paste the 8-character code shown at
 [my.remarkable.com/device/browser/connect](https://my.remarkable.com/device/browser/connect).
-The resulting token is stored in `~/.config/rmapi/rmapi.conf` (gitignored).
+The resulting token is stored in rmapi's platform config location:
+`~/Library/Application Support/rmapi/rmapi.conf` on macOS and
+`~/.config/rmapi/rmapi.conf` on Linux (gitignored).
 Neither the repository nor the script embeds any credentials.
 
 To migrate auth to another machine, either copy the conf file or repeat
@@ -130,6 +132,6 @@ Sizes relate to the tablet's physical screen (~6.2 in wide): 26 pt prose ≈
 
 ## Security
 
-Credentials live only in `~/.config/rmapi/rmapi.conf` (gitignored). All cloud
+Credentials live only in rmapi's platform config (`~/Library/Application Support/rmapi/rmapi.conf` on macOS; `~/.config/rmapi/rmapi.conf` on Linux, both gitignored). All cloud
 traffic is HTTPS, directly to reMarkable's endpoints. The device token grants
 read/write access to the account's document storage — treat it accordingly.

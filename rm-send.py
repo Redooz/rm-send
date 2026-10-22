@@ -295,8 +295,23 @@ def send_cloud(pdf, name):
     return "fail"
 
 
+def rmapi_config_paths():
+    configured = os.environ.get("RMAPI_CONFIG")
+    if configured:
+        return [os.path.expanduser(configured)]
+    paths = []
+    if sys.platform == "darwin":
+        paths.append(os.path.expanduser(
+            "~/Library/Application Support/rmapi/rmapi.conf"))
+    paths.extend([
+        os.path.expanduser("~/.config/rmapi/rmapi.conf"),
+        os.path.expanduser("~/.rmapi"),
+    ])
+    return paths
+
+
 def rmapi_ready():
-    return os.path.exists(os.path.expanduser("~/.config/rmapi/rmapi.conf"))
+    return any(os.path.exists(path) for path in rmapi_config_paths())
 
 
 STATE_DIR = os.path.expanduser("~/.local/state/rm-send")
@@ -375,7 +390,7 @@ def main():
         print("  1. open  https://my.remarkable.com/device/browser/connect")
         print("  2. paste the 8-character code when rmapi asks for it\n")
         r = subprocess.run(["rmapi"])
-        if os.path.exists(os.path.expanduser("~/.config/rmapi/rmapi.conf")) and r.returncode == 0:
+        if rmapi_ready() and r.returncode == 0:
             notify("✓ rmapi configured — cloud transport enabled")
         else:
             notify("✗ rmapi auth did not complete — see terminal")
